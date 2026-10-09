@@ -1,2 +1,14 @@
 # OS nonsense
 .DS_Store
+
+# LaTeX auxiliary files
+*.aux
+*.log
+*.out
+*.brf
+# BibTeX auxiliary files
+*.bbl
+*.blg
+# build tool auxiliary files
+*.synctex.gz
+*.synctex.gz(busy)
