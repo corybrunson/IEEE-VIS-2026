@@ -1,0 +1,386 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Balancing constriction and expansion for domain-specific grammars},
+  pdfauthor={Jason Cory Brunson},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newlength{\cslentryspacingunit} % times entry-spacing
+\setlength{\cslentryspacingunit}{\parskip}
+\newenvironment{CSLReferences}[2] % #1 hanging-ident, #2 entry spacing
+ {% don't indent paragraphs
+  \setlength{\parindent}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+  \let\oldpar\par
+  \def\par{\hangindent=\cslhangindent\oldpar}
+  \fi
+  % set entry spacing
+  \setlength{\parskip}{#2\cslentryspacingunit}
+ }%
+ {}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{#1\hfill\break}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{#1}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}\break}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+\newcommand\R{\mathbb{R}} \newcommand\diag{\operatorname{diag}} \newcommand\Var{\operatorname{Var}} \newcommand\proj{\operatorname{proj}} \newcommand\pkg\textsf
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\title{Balancing constriction and expansion for domain-specific
+grammars}
+\author{Jason Cory Brunson}
+\date{}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+Graphical grammars distinguish from heuristic typologies in constituting
+closed formal systems whose product diversity arises from recombination
+rather than from \emph{de novo} redesign. In practice, the scope of an
+implementation is constrained both by what options have been implemented
+for each component (for example, the polar coordinatization, the grouped
+count statistic, and the rectangle geometric element) and by what
+combinations are enabled (these three yielding a pie graphic). In the
+interest of flexibility, implementations are generally permissive of
+syntactically valid combinations. However, within some domains,
+universal or conditional rules may be in place to ensure that graphics
+faithfully or efficiently communicate important properties of the input
+data, such that grammatical implementations may compromise their
+integrity by permitting violations of these rules. I will present
+geometric data analysis as a motivating case study for this situation.
+Visualizations of point clouds, and especially the use of biplots,
+relies universally on a unitary aspect ratio and conditionally on data
+sphering for plot elements to approximate geometric relationships among
+data elements. Rather than a limitation of graphical grammar, these
+should be viewed as opportunities to explore the phrase spaces of
+different graphical domains. Indeed, the geometric constraints above
+enable the meaningful use of two families of statistical
+transformation---projections of constructions in higher dimensions and
+constructions in relation to referent points---that would otherwise
+produce uninterpretable graphics. This leads me to argue for a change in
+language from Wilkinson's assertion that, while a grammatical system can
+produce hideous graphics, it cannot produce meaningless ones. I suggest
+that meaningfulness and meaninglessness are not mathematical properties
+secured by formal rules but semantic properties vested with cultural
+significance, and that graphical grammars must adapt to the culture of a
+domain in order to serve as trustworthy tools for communicating
+information within it.
+\end{abstract}
+
+\pagebreak
+
+\hypertarget{grammar-of-graphics}{%
+\subsection{Grammar of Graphics}\label{grammar-of-graphics}}
+
+In his book introducing the grammar of graphics (GoG), Wilkinson (2005)
+emphasizes the value not only to the rigor but also to the extensibility
+of taking a grammatical, in opposition to a typological, approach to
+statistical graphics:
+
+\begin{quote}
+The remarkable consequence of building a closed formal system is that,
+while it solves more complex applied problems, it can appear more
+adaptive to the user. Paradoxically, closed systems often behave more
+``openly'' than open systems.
+\end{quote}
+
+This flexibility assumes and relies on a permissiveness toward the
+``phrase space'' of graphics that may be realized through syntactically
+valid combinations. Indeed, Wilkinson asserts that, while his system can
+produce many hideous graphics, it cannot produce meaningless ones. On my
+reading, the primary focus, in the interest of meaningfulness, is on the
+mathematical determinism connecting the data to the geometric elements
+of a graphic---ultimately defined as a visual representation of the
+abstract \emph{graph} of a mathematical function.
+
+To be sure, Wilkinson details how meaningful graphics must also account
+for human perceptual tendencies and for cultural norms. In popular
+implementations, led by Wickham (2009), most directives toward good
+practice take the form of defaults (e.g.~different color palettes for
+different variable types) and warnings (e.g.~that opacity should not
+encode a discrete variable). Wilkinson also posits certain
+near-universal constraints, for example that the plotting window should
+be sized to fit the input data, even if only summary statistics are
+visualized.
+
+What is missing in this account, i believe, is a reckoning with dialect:
+Certain disciplines use specialized graphics whose uniquely structured
+content imposes specialized constraints, so that extending the
+grammatical approach to produce them requires constraining the
+combinatorial freedom it makes possible. Rather than choosing between an
+uninhibited extension that encourages misleading graphics and a
+duplicative re-implementation for each domain, we should design and
+adopt formal principles to link essential data properties to graphical
+design patterns that must be sensitive to them.
+
+\hypertarget{geometric-data-analysis}{%
+\subsection{Geometric Data Analysis}\label{geometric-data-analysis}}
+
+GDA is a diverse family of techniques for analyzing data represented as
+a \emph{point cloud}---usually, a finite multisubset
+\(X \subset (\mathbb{R}^d, L^2)\)---and for transforming other data
+types into point clouds for analysis. The points \(x_i \in X\) may be
+attributed \emph{masses} \(m_i\), and the centroid of \(X\) is taken as
+the origin, so that the point \emph{inertias}
+\(m_i \lVert \vec{x} \rVert \vec{x}_i\) sum to zero. A foundational step
+in GDA is the decomposition of inertia via singular value decomposition
+(SVD): Taking \(X_{n \times m}\) to be centered and \(r \leq min(n,m)\),
+we obtain
+\[ X = U_{n \times r} \Sigma_{r \times r} {V_{m \times r}}^\top \] with
+coordinatewise inertias
+\(\operatorname{diag}(\Sigma) = (\sigma_1,\ldots,\sigma_r)\). The point
+cloud \(F = U\Sigma\) is a rotation of an optimal approximation to
+\(X\), with equality when \(r = \min(n,m)\); the column vectors
+\(\vec{v}_1,\ldots,\vec{v}_r\) of \(V\) each maximize
+\(\operatorname{Var}(\operatorname{proj}_{v_i}F_{i-1})\), where
+\(F_{i-1}\) is the projection onto the previous \(v_{i-1}\) (starting
+with \(F_0 = F\)); and each
+\(\operatorname{Var}(\operatorname{proj}_{v_i}F_{i-1}) = {\sigma_i}^2\).
+SVD thus obtains an ordered set of \emph{artificial coordinates} for the
+proxy point cloud \(F\).
+
+Two of the most widely used GDA techniques are principal components
+analysis (PCA), which obtains \(X\) by centering and scaling numeric
+case--variable data, and correspondence analysis (CA), which obtains a
+matrix of standardized residuals from bivariate count data. These
+techniques are called \emph{ordination} as opposed to regression (being
+unsupervised rather than supervised) and \emph{gradient analysis} as
+opposed to cluster analysis (yielding continuous rather than discrete
+artificial variables). The artificial coordinates (\emph{principal
+coordinates} along \emph{principal axes}) are not specified from a model
+but derived from data; because they carry no intrinsic meaning, they are
+sometimes called \emph{scaffolding}.
+
+The SVD supports a unique statistical graphic, the \emph{biplot},
+introduced by Gabriel (1971). Because the matrices \(U\) and \(V\) share
+their \(r\) artificial column variables, row markers for both (proxy row
+and column markers for \(X\)) can be overlaid on those axes. When \(F\)
+and \(V\) are overlaid, the scalar product of the \(i^\text{th}\) row
+marker and the \(j^\text{th}\) column marker approximates \(x_{ij}\);
+ditto \(U\) and \(G = VD\). In general, a biplot overlay of \(UD^a\) and
+\(VD^b\) is called \emph{balanced} when \(a + b = 1\), so that
+row--column inner products approximate measurements. The inertia-laden
+matrices \(F\) and \(G\) are said to contain \emph{principal
+coordinates} for the rows and columns of \(X\), while \(U\) and \(V\)
+contain \emph{standard coordinates} of unit magnitude. When a matrix
+factor is represented in principal coordinates, the graphic approximates
+its geometry in the standard coordinate space of the other factor: In
+PCA, distances between the markers of \(F\) approximate those between
+the rows of \(X\) in the space of measured variables, while inner
+products and cosines between the markers of \(G\) approximate
+covariances and correlations between the columns of \(X\) across the
+case measurements. In CA, distances between markers of \(F\) and of
+\(G\) approximate \(\chi^2\) distances between row and column profiles
+in the count table.
+
+Greenacre (2010) uses biplots to surface the mathematical unity of these
+techniques. However, this unity is rarely reflected in software
+packages. Implementations of PCA, CA, and several other techniques in
+\textsf{stats} and \textsf{MASS}, for example, share no source code
+beyond \texttt{base::svd()}, accept dissimilar arguments even for
+equivalent parameters (e.g.~the rank \(r\)), and produce output classes
+with few shared methods. My attempt to harmonize these tools through
+\textsf{ordr}, a tidyverse-inspired API that foregrounds this common
+theory, is the impetus for the remaining sections.
+
+\hypertarget{tensions-between-gda-and-gog}{%
+\subsection{Tensions between GDA and
+GoG}\label{tensions-between-gda-and-gog}}
+
+Point clouds are more homogeneous and rigid mathematical abstractions
+than the case--variable tables for which most statistical graphics are
+designed. Most conspicuously, the coordinates must be equally scaled to
+faithfully represent geometric relationships among the markers. This
+need has not, to my knowledge, received focused attention in the GoG
+space. For example, while Wilkinson showcases such graphics as Voronoi
+polygons and sun glyphs that rely for their interpretations on a unit
+aspect ratio, he only briefly mentions that this choice should be
+informed by context. On the implementation side, \textsf{ggplot2}
+provides the coordinatization ggproto \texttt{CoordFixed} with default
+\texttt{ratio\ =\ 1}, but its invocation is the responsibility of the
+user. This mismatch between domain and convention has enabled data
+analysts to publish biplots that misrepresent the geometry of their
+data.
+
+Some default and hardcoded settings of \textsf{ggplot2} are also at odds
+with best practices in GDA visualization: The artificial coordinates
+used as scaffolding rarely warrant labels, let alone tick marks or grid
+lines; instead, Gower, Lubbe, and Le Roux (2011) recommends that
+variable axes be incorporated as graphical elements within the plot
+window.
+
+Finally, as imbalanced biplots are strongly discouraged, rigorous
+graphical software should inhibit such choices of the exponents \(a\)
+and \(b\). Biplot-specific programs usually hide or protect this choice
+from the user: \texttt{stats::biplot.princomp()} passes the argument
+\texttt{scale} to \(b\) and \texttt{1\ -\ scale} to \(a\), while
+\textsf{biplotEZ} provides the character-valued argument
+\texttt{CA(variant)} and the logical-valued argument
+\texttt{PCA(correlation.biplot)} that specify row-principal,
+column-principal, or symmetric (neither-principal) overlays. Because
+\textsf{ggplot2} and similar GoG implementations generally determine
+plot layers from one data set at a time, this balance is again the
+responsibility of the user.
+
+\hypertarget{contributions-of-gda-to-gog}{%
+\subsection{Contributions of GDA to
+GoG}\label{contributions-of-gda-to-gog}}
+
+The aforementioned tensions should be taken not as intrinsic to the
+grammatical approach but as an opportunity to advance theory and
+practice. The \textsf{ggplot2} extension community in particular
+maintains a tradition of embracing such challenges. I wish to highlight
+three contributions i believe GDA has to make to GoG, with preliminary
+implementations in \textsf{ordr} and its spinoff \textsf{gggda}.
+
+First, it is often of interest in GDA to visually qualify how well the
+geometry in the first artificial dimensions (those used to plot)
+captures that of the full space.\footnote{This is quantified as a ratio
+  of partial to total variances, called \emph{adequacy}.} One approach
+is to assemble a minimal spanning tree in high dimensions and overlay
+its projection (Jolliffe 2002). Such layers require that the statistical
+transformation object have access to the full point cloud---inconsistent
+if not impossible in GoG as originally conceived. Drawing from a
+tradition of set-valued aesthetics tracing back to \textsf{ggmosaic},
+\textsf{gggda} provides a mechanism to pass coordinate data of arbitrary
+dimension for statistical transformation before projecting for geometric
+construction.
+
+Second, the unadjusted overlay of two marker sets can yield messy
+biplots. A common adjustment for PCA biplots is to offset calibrated
+variable axes from the dense core of case markers. This allows for
+clearer projection, by the reader or even rendered in the plot, from
+select markers onto select axes (yielding inner products). To try and
+err at satisfying offsets is impractical, and algorithms are available
+that work in most cases; but they require at least summary information
+about secondary data---the cases---to compute graphical elements for
+primary data---the variables. \textsf{gggda} implements a family of
+\emph{referential stats}, built on the prototype \texttt{StatRef}, that
+take a secondary data frame as an additional argument. While
+straightforward, this trick couples with a feature of \textsf{ordr} that
+preserves both matrix factors of an SVD-based technique so that each by
+default produces layers with the other as referent (if invoked).
+
+Finally, to evoke the common scale of the artificial axes, and to reveal
+the difference in data range between the first and second axes, biplot
+windows are often made square, rather than reshaped to fit the data.
+\textsf{gggda} provides a coordinatization ggproto \texttt{CoordRect} to
+achieve this for any desired ratio of window dimensions. This in turn
+supports the in-development paneling ggproto \texttt{FacetOrd}, which
+yields a pairs plot for artificial coordinates that follows the rigid
+requirements above while permitting both fixed and varying panel sizes.
+These conventions could be used to plot any set of real-valued data but
+to my knowledge have not previously been introduced.
+
+\hypertarget{a-case-for-domain-constrained-grammar}{%
+\subsection{A Case for Domain-Constrained
+Grammar}\label{a-case-for-domain-constrained-grammar}}
+
+The case studies above lead me to argue that GoG, both in theory and in
+practice, should take a deliberate approach to the constraint sets on
+statistical graphics associated with specific domains. \textsf{ggplot2}
+itself deals delicately and implicitly with Simple Features data, for
+example, by transforming segments between geographic coordinates into
+approximate meridians and tucking the coordinatization constructor
+\texttt{coord\_sf()} into the geometric element constructor
+\texttt{geom\_sf()}; but users may violate good practice by overriding
+these behaviors. At an opposite extreme, \textsf{ggraph} and
+\textsf{ggtern} are designed to operate entirely without native
+\textsf{ggplot2} constructors. I suggest that a middle ground is
+required to satisfy the needs of users in, and especially those
+straddling, diverse specialties: From each specialty should be derived a
+\emph{graphical dialect}, constituting both permitted objects and
+constraints on their combination. Such dialects should be based on
+standards of good practice and formalized mathematically so that they
+may be unambiguously implemented. At a low level, an implementation
+should then have the ability to declare and adopt a dialect, for a
+single plot (perhaps by using a special initializer) or for a section of
+code (perhaps by setting a global option), with the effect that plot
+assembly informatively enables domain-specific features and imposes
+domain-specific constraints (perhaps by code completions and
+suggestions). At a high level, a family of well-defined dialects should
+help organize a grand unified GoG at an important meso-scale between its
+basic objects and its space of all feasible plot types.
+
+\hypertarget{refs}{}
+\begin{CSLReferences}{1}{0}
+\leavevmode\vadjust pre{\hypertarget{ref-Gabriel1971}{}}%
+Gabriel, K. R. 1971. {``The Biplot Graphic Display of Matrices with
+Application to Principal Component Analysis.''} \emph{Biometrika} 58
+(3): 453--67. \url{https://doi.org/10.2307/2334381}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-Gower2011}{}}%
+Gower, John C., Sugnet Lubbe, and Niël J. Le Roux. 2011.
+\emph{Understanding Biplots}. John Wiley \& Sons, Ltd.
+\url{https://www.wiley.com/go/biplots}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-Greenacre2010}{}}%
+Greenacre, Michael J. 2010. \emph{Biplots in Practice}. Bilbao:
+Fundación BBVA.
+\url{https://www.fbbva.es/en/publicaciones/biplots-in-practice-7/}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-Jolliffe2002}{}}%
+Jolliffe, I. T. 2002. \emph{Principal Component Analysis}. 2nd ed.
+Springer Series in Statistics. New York: Springer-Verlag.
+\url{https://doi.org/10.1007/b98835}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-Wickham2009}{}}%
+Wickham, Hadley. 2009. \emph{Ggplot2: Elegant Graphics for Data
+Analysis}. New York, NY: Springer.
+\url{https://doi.org/10.1007/978-0-387-98141-3}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-Wilkinson2005}{}}%
+Wilkinson, Leland. 2005. \emph{The Grammar of Graphics}. 2nd ed.
+Statistics and Computing. New York: Springer-Verlag.
+\url{https://doi.org/10.1007/0-387-28695-0}.
+
+\end{CSLReferences}
+
+\end{document}

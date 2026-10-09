@@ -3,7 +3,7 @@ title: Balancing constriction and expansion for domain-specific grammars
 author: Jason Cory Brunson
 venue: IEEE VIS 2026
 session: Grand Unified Grammar of Graphics
-bibliography: GUGOG.bib
+bibliography: ../GUGOG.bib
 abstract: |
   Graphical grammars distinguish from heuristic typologies in constituting closed formal systems whose product diversity arises from recombination rather than from _de novo_ redesign.
   In practice, the scope of an implementation is constrained both by what options have been implemented for each component (for example, the polar coordinatization, the grouped count statistic, and the rectangle geometric element) and by what combinations are enabled (these three yielding a pie graphic).
@@ -24,6 +24,8 @@ header-includes:
 ---
 
 <!--
+Pandoc to TeX:
+pandoc Brunson-GDA-GoG.md --citeproc -s -o Brunson-GDA-GoG.tex
 Pandoc via TeX to PDF:
 pandoc Brunson-GDA-GoG.md --citeproc -o Brunson-GDA-GoG.pdf
 -->
