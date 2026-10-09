@@ -1,20 +1,24 @@
 % Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
-%
 \documentclass[
 ]{article}
+\usepackage{xcolor}
 \usepackage{amsmath,amssymb}
-\usepackage{lmodern}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provide euro and other symbols
 \else % if luatex or xetex
-  \usepackage{unicode-math}
+  \usepackage{unicode-math} % this also loads fontspec
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
@@ -32,46 +36,55 @@
 }{% if KOMA class
   \KOMAoptions{parskip=half}}
 \makeatother
-\usepackage{xcolor}
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\newcommand\R{\mathbb{R}} \newcommand\diag{\operatorname{diag}} \newcommand\Var{\operatorname{Var}} \newcommand\proj{\operatorname{proj}} \newcommand\pkg\textsf
+\usepackage{bookmark}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\urlstyle{same}
+% fallback for those not using the hyperref driver hyperxmp:
+\makeatletter
+\@ifundefined{xmpquote}{\newcommand{\xmpquote}[1]{#1}}{}
+\makeatother
 \hypersetup{
   pdftitle={Balancing constriction and expansion for domain-specific grammars},
   pdfauthor={Jason Cory Brunson},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
-\urlstyle{same} % disable monospaced font for URLs
-\setlength{\emergencystretch}{3em} % prevent overfull lines
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
-\newlength{\cslhangindent}
-\setlength{\cslhangindent}{1.5em}
-\newlength{\csllabelwidth}
-\setlength{\csllabelwidth}{3em}
-\newlength{\cslentryspacingunit} % times entry-spacing
-\setlength{\cslentryspacingunit}{\parskip}
-\newenvironment{CSLReferences}[2] % #1 hanging-ident, #2 entry spacing
- {% don't indent paragraphs
-  \setlength{\parindent}{0pt}
-  % turn on hanging indent if param 1 is 1
-  \ifodd #1
-  \let\oldpar\par
-  \def\par{\hangindent=\cslhangindent\oldpar}
-  \fi
-  % set entry spacing
-  \setlength{\parskip}{#2\cslentryspacingunit}
- }%
- {}
-\usepackage{calc}
-\newcommand{\CSLBlock}[1]{#1\hfill\break}
-\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{#1}}
-\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}\break}
-\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
-\newcommand\R{\mathbb{R}} \newcommand\diag{\operatorname{diag}} \newcommand\Var{\operatorname{Var}} \newcommand\proj{\operatorname{proj}} \newcommand\pkg\textsf
-\ifLuaTeX
-  \usepackage{selnolig}  % disable illegal ligatures
-\fi
 
 \title{Balancing constriction and expansion for domain-specific
 grammars}
@@ -116,8 +129,7 @@ information within it.
 
 \pagebreak
 
-\hypertarget{grammar-of-graphics}{%
-\subsection{Grammar of Graphics}\label{grammar-of-graphics}}
+\subsection{Grammar of Graphics}\label{grammar-of-graphics}
 
 In his book introducing the grammar of graphics (GoG), Wilkinson (2005)
 emphasizes the value not only to the rigor but also to the extensibility
@@ -160,8 +172,7 @@ duplicative re-implementation for each domain, we should design and
 adopt formal principles to link essential data properties to graphical
 design patterns that must be sensitive to them.
 
-\hypertarget{geometric-data-analysis}{%
-\subsection{Geometric Data Analysis}\label{geometric-data-analysis}}
+\subsection{Geometric Data Analysis}\label{geometric-data-analysis}
 
 GDA is a diverse family of techniques for analyzing data represented as
 a \emph{point cloud}---usually, a finite multisubset
@@ -230,9 +241,8 @@ with few shared methods. My attempt to harmonize these tools through
 \textsf{ordr}, a tidyverse-inspired API that foregrounds this common
 theory, is the impetus for the remaining sections.
 
-\hypertarget{tensions-between-gda-and-gog}{%
 \subsection{Tensions between GDA and
-GoG}\label{tensions-between-gda-and-gog}}
+GoG}\label{tensions-between-gda-and-gog}
 
 Point clouds are more homogeneous and rigid mathematical abstractions
 than the case--variable tables for which most statistical graphics are
@@ -252,9 +262,8 @@ data.
 Some default and hardcoded settings of \textsf{ggplot2} are also at odds
 with best practices in GDA visualization: The artificial coordinates
 used as scaffolding rarely warrant labels, let alone tick marks or grid
-lines; instead, Gower, Lubbe, and Le Roux (2011) recommends that
-variable axes be incorporated as graphical elements within the plot
-window.
+lines; instead, Gower et al. (2011) recommends that variable axes be
+incorporated as graphical elements within the plot window.
 
 Finally, as imbalanced biplots are strongly discouraged, rigorous
 graphical software should inhibit such choices of the exponents \(a\)
@@ -269,9 +278,8 @@ column-principal, or symmetric (neither-principal) overlays. Because
 plot layers from one data set at a time, this balance is again the
 responsibility of the user.
 
-\hypertarget{contributions-of-gda-to-gog}{%
 \subsection{Contributions of GDA to
-GoG}\label{contributions-of-gda-to-gog}}
+GoG}\label{contributions-of-gda-to-gog}
 
 The aforementioned tensions should be taken not as intrinsic to the
 grammatical approach but as an opportunity to advance theory and
@@ -319,9 +327,8 @@ requirements above while permitting both fixed and varying panel sizes.
 These conventions could be used to plot any set of real-valued data but
 to my knowledge have not previously been introduced.
 
-\hypertarget{a-case-for-domain-constrained-grammar}{%
 \subsection{A Case for Domain-Constrained
-Grammar}\label{a-case-for-domain-constrained-grammar}}
+Grammar}\label{a-case-for-domain-constrained-grammar}
 
 The case studies above lead me to argue that GoG, both in theory and in
 practice, should take a deliberate approach to the constraint sets on
@@ -349,36 +356,34 @@ suggestions). At a high level, a family of well-defined dialects should
 help organize a grand unified GoG at an important meso-scale between its
 basic objects and its space of all feasible plot types.
 
-\hypertarget{refs}{}
-\begin{CSLReferences}{1}{0}
-\leavevmode\vadjust pre{\hypertarget{ref-Gabriel1971}{}}%
+\protect\phantomsection\label{refs}
+\begin{CSLReferences}{1}{1}
+\bibitem[\citeproctext]{ref-Gabriel1971}
 Gabriel, K. R. 1971. {``The Biplot Graphic Display of Matrices with
 Application to Principal Component Analysis.''} \emph{Biometrika} 58
 (3): 453--67. \url{https://doi.org/10.2307/2334381}.
 
-\leavevmode\vadjust pre{\hypertarget{ref-Gower2011}{}}%
+\bibitem[\citeproctext]{ref-Gower2011}
 Gower, John C., Sugnet Lubbe, and Niël J. Le Roux. 2011.
 \emph{Understanding Biplots}. John Wiley \& Sons, Ltd.
 \url{https://www.wiley.com/go/biplots}.
 
-\leavevmode\vadjust pre{\hypertarget{ref-Greenacre2010}{}}%
-Greenacre, Michael J. 2010. \emph{Biplots in Practice}. Bilbao:
-Fundación BBVA.
+\bibitem[\citeproctext]{ref-Greenacre2010}
+Greenacre, Michael J. 2010. \emph{Biplots in Practice}. Fundación BBVA.
 \url{https://www.fbbva.es/en/publicaciones/biplots-in-practice-7/}.
 
-\leavevmode\vadjust pre{\hypertarget{ref-Jolliffe2002}{}}%
+\bibitem[\citeproctext]{ref-Jolliffe2002}
 Jolliffe, I. T. 2002. \emph{Principal Component Analysis}. 2nd ed.
-Springer Series in Statistics. New York: Springer-Verlag.
+Springer Series in Statistics. Springer-Verlag.
 \url{https://doi.org/10.1007/b98835}.
 
-\leavevmode\vadjust pre{\hypertarget{ref-Wickham2009}{}}%
+\bibitem[\citeproctext]{ref-Wickham2009}
 Wickham, Hadley. 2009. \emph{Ggplot2: Elegant Graphics for Data
-Analysis}. New York, NY: Springer.
-\url{https://doi.org/10.1007/978-0-387-98141-3}.
+Analysis}. Springer. \url{https://doi.org/10.1007/978-0-387-98141-3}.
 
-\leavevmode\vadjust pre{\hypertarget{ref-Wilkinson2005}{}}%
+\bibitem[\citeproctext]{ref-Wilkinson2005}
 Wilkinson, Leland. 2005. \emph{The Grammar of Graphics}. 2nd ed.
-Statistics and Computing. New York: Springer-Verlag.
+Statistics and Computing. Springer-Verlag.
 \url{https://doi.org/10.1007/0-387-28695-0}.
 
 \end{CSLReferences}
