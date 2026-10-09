@@ -83,11 +83,11 @@
 %% Abstract section.
 \abstract{
     Graphical grammars distinguish from heuristic typologies in constituting closed formal systems whose product diversity arises from recombination rather than from \emph{de novo} redesign.
-    In practice, the scope of an implementation is constrained both by what options have been implemented for each component (for example, the polar coordinatization, the grouped count statistic, and the rectangle geometric element) and by what combinations are enabled (these three yielding a pie graphic).
+    In practice, the scope of an implementation is constrained both by what options have been implemented for each component (e.g.~the polar coordinatization, the grouped count statistic, and the rectangle geometric element) and by what combinations are enabled (these three yielding a pie graphic).
     In the interest of flexibility, implementations are generally permissive of syntactically valid combinations.
-    However, within some domains, universal or conditional rules may be in place to ensure that graphics faithfully or efficiently communicate important properties of the input data, such that grammatical implementations may compromise their integrity by permitting violations of these rules.
+    However, within some domains, universal or conditional rules may be in place to ensure that graphics faithfully communicate important properties of the input data, such that permitting violations would compromise their integrity.
     I will present geometric data analysis as a motivating case study for this situation.
-    Visualizations of point clouds, and especially the use of biplots, relies universally on a unitary aspect ratio and conditionally on data sphering for plot elements to approximate geometric relationships among data elements.
+    Visualizations of point clouds, and especially the use of biplots, relies universally on a unit aspect ratio and conditionally on coordinate standardization for plot elements to approximate geometric relationships among data elements.
     Rather than a limitation of graphical grammar, these should be viewed as opportunities to explore the phrase spaces of different graphical domains.
     Indeed, the geometric constraints above enable the meaningful use of two families of statistical transformation---projections of constructions in higher dimensions and constructions in relation to referent points---that would otherwise produce uninterpretable graphics.
     This leads me to argue for a change in language from Wilkinson's assertion that, while a grammatical system can produce hideous graphics, it cannot produce meaningless ones.
@@ -117,7 +117,7 @@
 \maketitle
 
 %% \section{Introduction} %for journal use above \firstsection{..} instead
-In his book introducing the grammar of graphics (GoG), Wilkinson \cite{Wilkinson2005} emphasizes the value not only to the rigor but also to the extensibility of taking a grammatical, in opposition to a typological, approach to statistical graphics:
+In his book introducing the grammar of graphics (GoG), Wilkinson \cite{Wilkinson2005} emphasizes the value not only to rigor but also to extensibility of taking a grammatical, in opposition to a typological, approach to statistical graphics:
 
 \begin{quote}
 The remarkable consequence of building a closed formal system is that, while it solves more complex applied problems, it can appear more adaptive to the user. Paradoxically, closed systems often behave more ``openly'' than open systems.
@@ -133,8 +133,8 @@ In popular implementations, led by Wickham \cite{Wickham2009}, most directives t
 Wilkinson also posits certain near-universal constraints, for example that the plotting window should be sized to fit the input data, even if only summary elements are visualized.
 
 What is missing in this account, i believe, is a reckoning with dialect:
-Certain disciplines use specialized graphics whose uniquely structured content imposes specialized constraints, so that extending the grammatical approach to produce them requires constraining the combinatorial freedom it makes possible.
-Rather than choosing between an uninhibited extension that enables misleading graphics and a duplicative re-implementation for each domain, we should design and adopt formal principles of fidelity between important properties of the data to the graphical design patterns that encode them.
+Certain disciplines manage structured data that imposes specialized constraints on graphical representations, so that extending the grammatical approach to produce them requires constraining the combinatorial freedom it makes possible.
+Rather than choosing between uninhibited extensions that enable misleading graphics and a duplicative re-implementation for each domain, we should design and adopt principles of fidelity between important properties of the data to the graphical design patterns that encode them.
 
 \section{Geometric Data Analysis}
 
@@ -162,7 +162,7 @@ In CA, distances between markers of $F$ and of $G$ approximate $\chi^2$ distance
 
 Greenacre \cite{Greenacre2010} uses biplots to surface the mathematical unity of these techniques.
 However, this unity is rarely reflected in software packages.
-Implementations of PCA, CA, and several other techniques in \pkg{stats} and \pkg{MASS}, for example, share no source code beyond \texttt{base::svd()}, accept dissimilar arguments even for equivalent parameters (e.g.~the rank $r$), and produce output classes with few shared methods.
+Implementations of PCA, CA, and several other techniques in \pkg{stats} and \pkg{MASS}, for example, share no source code beyond \texttt{base::svd()}, accept dissimilar arguments for equivalent parameters (e.g.~the rank $r$), and produce output classes with few shared methods.
 My attempt to harmonize these tools through \pkg{ordr}, a tidyverse-inspired API that foregrounds this common theory, is the impetus for the remaining sections.
 
 \section{Tensions between GDA and GoG}
@@ -197,13 +197,12 @@ Such layers require that the statistical transformation object have access to th
 Drawing from a tradition of set-valued aesthetics tracing back to \pkg{ggmosaic}, \pkg{gggda} provides a mechanism to pass coordinate data of arbitrary dimension for statistical transformation before projecting for geometric construction.
 
 Second, the unadjusted overlay of two marker sets can yield messy biplots.
-A common adjustment for PCA biplots is to offset calibrated variable axes from the dense core of case markers.
-This allows for clearer projection from select markers onto select axes (yielding inner products).
-To try and err at satisfying offsets is impractical, and algorithms are available that work in most cases; but they require at least summary information about secondary data---the cases---to compute graphical elements for primary data---the variables.
+A common PCA biplot adjustment offsets calibrated variable axes from the dense core of case markers, which clarifies projections from select markers onto select axes (yielding inner products).
+To try and err at acceptable offsets is impractical; serviceable algorithms exist but require at least summary information about secondary data---the cases---to compute graphical elements for primary data---the variables.
 \pkg{gggda} implements a family of \emph{referential stats}, built on the prototype \texttt{StatRef}, that take a reference data frame as an additional argument.
 This trick couples with a feature of \pkg{ordr} that preserves both matrix factors of an SVD-based technique so that each by default produces layers with the other as referent.
 
-Finally, to evoke the common scale of the artificial axes, and to reveal the difference in data range between the first and second axes, biplot windows are often made square, rather than truncated in each dimension to the data range.
+Finally, to evoke the common scale of the artificial axes and reveal differences in the data ranges between them, biplot windows are often made square, rather than truncated in each dimension to the data range.
 \pkg{gggda} provides a coordinatization ggproto \texttt{CoordRect} to achieve this for any desired ratio of window dimensions.
 This in turn supports the in-development paneling ggproto \texttt{FacetOrd}, which yields a pairs plot for artificial coordinates that follows the rigid requirements above while permitting both fixed and varying panel sizes.
 These conventions could be used to plot any set of real-valued data but to my knowledge have not previously been introduced.
@@ -211,12 +210,12 @@ These conventions could be used to plot any set of real-valued data but to my kn
 \section{A Case for Domain-Constrained Grammar}
 
 The case studies above lead me to argue that GoG, in theory as well as in practice, should take a deliberate approach to the constraint sets on statistical graphics associated with specific domains.
-\pkg{ggplot2} itself deals delicately and implicitly with Simple Features data, for example, by transforming segments between geographic coordinates into approximate meridians and tucking the coordinatization constructor \texttt{coord\_sf()} into the geometric element constructor \texttt{geom\_sf()}; but users may violate good practice by overriding these behaviors.
+\pkg{ggplot2} itself handles Simple Features data delicately, for example, by transforming segments between geographic coordinates into approximate meridians and tucking the coordinatization constructor \texttt{coord\_sf()} into the geometric element constructor \texttt{geom\_sf()}; but users may override these behaviors.
 At an opposite extreme, \pkg{ggraph} and \pkg{ggtern} are designed to operate entirely without native \pkg{ggplot2} constructors.
 I suggest that a middle ground is required to satisfy the needs of users in, and especially those straddling, diverse specialties:
 From each specialty should be derived a \emph{graphical dialect}, constituting both permitted objects and constraints on their combination.
 Such dialects should be based on standards of good practice and formalized mathematically so that they may be unambiguously implemented.
-At a low level, an implementation should then have the ability to declare and adopt a dialect, for a single plot (perhaps by using a special initializer) or for a section of code (perhaps by setting a global option), with the effect that plot assembly informatively enables domain-specific features and imposes domain-specific constraints (perhaps by code completions and suggestions).
+At a low level, an implementation should then declare and adopt a domain-specific dialect, for a single plot (perhaps by using a special initializer) or for a section of code (perhaps by setting a global option), that enables features and imposes constraints (perhaps by code completions and suggestions) during plot assembly.
 At a high level, a family of well-defined dialects should help organize a grand unified GoG at an important meso-scale between its basic objects and its space of all feasible plot types.
 
 %\bibliographystyle{abbrv}
