@@ -1,7 +1,7 @@
 # Figure(s) for GUGOG submission and/or slideshow, 2026 Nov 9
 
 # inches * scale factor
-sf <- 5/4
+sf <- 1
 col_width <- 3.333 * sf
 text_width <- 7 * sf
 
