@@ -14,7 +14,6 @@ library(gggda)
 pal <- palette.colors(palette = "Okabe-Ito", names = TRUE)
 
 Cereal |> 
-  mutate(across(Calories:Protein, ~ .x / Serving)) |> 
   ordinate(cols = Calories:Protein, model = ~ prcomp(., scale. = TRUE)) |> 
   print() -> cereal_ord
 
