@@ -40,6 +40,6 @@ pca_biplot <- ggbiplot(cereal_ord) +
 print(pca_biplot)
 
 ggsave(
-  here::here("gugog-figure-cereal.pdf"), pca_biplot,
+  here::here("camera-ready/gugog-figure-cereal.pdf"), pca_biplot,
   width = text_width, height = text_width, units = "in"
 )
