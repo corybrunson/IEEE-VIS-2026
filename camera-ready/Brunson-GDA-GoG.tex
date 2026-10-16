@@ -28,6 +28,14 @@
 
 %% Math symbols and operators used throughout the text.
 \usepackage{amsmath,amssymb}
+\usepackage{listings}
+\lstset{
+  basicstyle=\ttfamily\small,
+  numbers=left,
+  breaklines=true,
+  frame=single,
+  columns=fullflexible
+}
 
 %% We encourage the use of mathptmx for consistent usage of times font
 %% throughout the proceedings. However, if you encounter conflicts
@@ -40,7 +48,7 @@
 \newcommand{\Var}{\operatorname{Var}}
 \newcommand{\proj}{\operatorname{proj}}
 \newcommand{\pkg}[1]{\textsf{#1}}
-
+\let\code=\texttt
 
 %% If you are submitting a paper to a conference for review with a double
 %% blind reviewing process, please replace the value ``0'' below with your
@@ -164,6 +172,66 @@ Greenacre \cite{Greenacre2010} uses biplots to surface the mathematical unity of
 However, this unity is rarely reflected in software packages.
 Implementations of PCA, CA, and several other techniques in \pkg{stats} and \pkg{MASS}, for example, share no source code beyond \texttt{base::svd()}, accept dissimilar arguments for equivalent parameters (e.g.~the rank $r$), and produce output classes with few shared methods.
 My attempt to harmonize these tools through \pkg{ordr}, a tidyverse-inspired API that foregrounds this common theory, is the impetus for the remaining sections.
+
+\begin{figure*}[h!]
+  \begin{minipage}[t]{0.39\textwidth}
+    \begin{lstlisting}%[language=R]
+    
+pal <- palette.colors(palette = "Okabe-Ito")
+Lock5withR::Cereal |> 
+  ordinate(
+    cols = Calories:Protein,
+    model = ~ prcomp(., scale. = TRUE)
+  ) |> 
+  ggbiplot() +
+  geom_rows_point(size = 1.5, color = pal[6]) +
+  geom_rows_text_repel(
+    aes(label = Name),
+    size = 3, color = pal[6]
+  ) +
+  geom_unit_circle(color = pal[7]) +
+  geom_cols_axis(
+    aes(label = name, center = center, scale = scale),
+    size = 4, num = 10, label_dodge = .02,
+    tick_length = .01, text_dodge = .012
+  ) +
+  geom_cols_vector(
+    arrow = arrow(type = "closed"), linewidth = .75,
+    color = pal[7], vector_labels = FALSE
+  ) +
+  stat_rows_projection(
+    subset = 23, ref_subset = c(2, 4, 6),
+    color = pal[4],
+    linetype = "dashed", linewidth = .75
+  ) +
+  coord_rect() +
+  theme_biplot()
+    \end{lstlisting}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[t]{0.57\textwidth}
+    \centering
+    \vspace{0pt}
+    \includegraphics[width=\linewidth]{gugog-figure-cereal}
+  \end{minipage}
+  \caption{
+    Row-principal PCA biplot of cereal nutrition data.
+    Packages \pkg{grid}, \pkg{dplyr}, \pkg{ordr}, and \pkg{gggda} must be attached.
+    Lines 3--6: The ordination helper uses the default \code{center = TRUE} from
+    \code{prcomp} and knows the balanced inertia $(a=1,b=0)$ of its returned object.
+    Line 15: Aesthetics \code{center} and \code{scale} are used to calibrate the axes.
+    Lines 13 and 19--22: Variable markers in standard coordinates are projected from
+    unit vectors onto the 2-D window; shorter lengths indicate worse approximations.
+    Lines 23--27: Referential stat for orthogonal projections from a case marker to
+    an axis approximately recover values in the table; relies on \code{LayerRef}.
+    Line 28: Subclass of \code{CoordFixed} that fixes aspect ratios for both
+    coordinate axes, essential for interpreting the above,
+    and window dimensions, which visually signals the geometry.
+    The use of \code{pal[*]} throughout and of integers rather than names
+    to specify \code{subset} and \code{ref\_subset} illustrate current limitations.
+  }
+  \label{fig:gugog-cereal}
+\end{figure*}
 
 \section{Tensions between GDA and GoG}
 
