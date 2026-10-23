@@ -189,12 +189,13 @@ Lock5withR::Cereal |>
     aes(label = Name),
     size = 3, color = pal[6]
   ) +
-  geom_unit_circle(color = pal[7]) +
   geom_cols_axis(
     aes(label = name, center = center, scale = scale),
+    axis.type = "predictive",
     size = 4, num = 10, label_dodge = .02,
     tick_length = .01, text_dodge = .012
   ) +
+  geom_unit_circle(color = pal[7]) +
   geom_cols_vector(
     arrow = arrow(type = "closed"), linewidth = .75,
     color = pal[7], vector_labels = FALSE
@@ -219,14 +220,17 @@ Lock5withR::Cereal |>
     Packages \pkg{grid}, \pkg{dplyr}, \pkg{ordr}, and \pkg{gggda} must be attached.
     Lines 3--6: The ordination helper uses the default \code{center = TRUE} from
     \code{prcomp} and knows the balanced inertia $(a=1,b=0)$ of its returned object.
-    Line 15: Aesthetics \code{center} and \code{scale} are used to calibrate the axes.
-    Lines 13 and 19--22: Variable markers in standard coordinates are projected from
+    Lines 13--18: Variable axes are calibrated using the \code{center} and \code{scale}
+    aesthetics and rescaled for predictive calibration.
+    Lines 19--23: Variable markers in standard coordinates are projected from
     unit vectors onto the 2-D window; shorter lengths indicate worse approximations.
-    Lines 23--27: Referential stat for orthogonal projections from a case marker to
-    an axis approximately recover values in the table; relies on \code{LayerRef}.
-    Line 28: Subclass of \code{CoordFixed} that fixes aspect ratios for both
+    Lines 24--28: Referential stat for orthogonal projections from a case marker to
+    an axis approximately recover values in the table; relies on \code{LayerRef}
+    and assumes predictive scales.
+    Line 29: Subclass of \code{CoordFixed} that fixes aspect ratios for both
     coordinate axes, essential for interpreting the above,
     and window dimensions, which visually signals the geometry.
+    Line 30: Subtheme removes scaffolding elements.
     The use of \code{pal[*]} throughout and of integers rather than names
     to specify \code{subset} and \code{ref\_subset} illustrate current limitations.
   }

@@ -8,8 +8,9 @@ text_width <- 7 * sf
 # pak::pkg_install("Lock5withR@1.2.2")
 library(Lock5withR)
 library(dplyr)
-library(ordr)
 library(gggda)
+# library(ordr)
+devtools::load_all("../../../software/ordr-collection/ordr")
 
 pal <- palette.colors(palette = "Okabe-Ito", names = TRUE)
 
@@ -22,11 +23,12 @@ slice(Cereal, 23)
 pca_biplot <- ggbiplot(cereal_ord) +
   geom_rows_point(size = 1.5, color = pal[["blue"]]) +
   geom_rows_text_repel(aes(label = Name), size = 3, color = pal[["blue"]]) +
-  geom_unit_circle(color = pal[["vermillion"]]) +
   geom_cols_axis(
-    aes(label = name, center = center, scale = scale), size = 4,
+    aes(label = name, center = center, scale = scale),
+    axis.type = "predictive", size = 4,
     tick_length = .01, text_dodge = .012, label_dodge = .02, num = 10
   ) +
+  geom_unit_circle(color = pal[["vermillion"]]) +
   geom_cols_vector(
     arrow = grid::arrow(length = unit(.01, "native"), type = "closed"),
     linewidth = .75, color = pal[["vermillion"]], vector_labels = FALSE
