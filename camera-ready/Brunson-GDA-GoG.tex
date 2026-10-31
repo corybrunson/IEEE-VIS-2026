@@ -152,7 +152,7 @@ A foundational step in GDA is the decomposition of inertia via singular value de
 Taking $X_{n \times m}$ to be centered and $r \leq min(n,m)$, we obtain
 \[ X = U_{n \times r} \Sigma_{r \times r} {V_{m \times r}}^\top \]
 with coordinatewise inertias $\diag(\Sigma) = (\sigma_1,\ldots,\sigma_r)$.
-The point cloud $F = U\Sigma$ is a rotation of an optimal approximation to $X$, with equality when $r = \min(n,m)$; the column vectors $\vec{v}_1,\ldots,\vec{v}_r$ of $V$ each maximize $\Var(\proj_{v_i}F_{i-1})$, where $F_{i-1}$ is the {\bfseries normal space/orthogonal complement} to the span $\langle \vec{v}_1, \ldots, \vec{v}_{i-1} \rangle$ (starting with $F_0 = F$); and each $\Var(\proj_{v_i}F_{i-1}) = {\sigma_i}^2$.
+The point cloud $F = U\Sigma$ is a rotation of an optimal approximation to $X$, with equality when $r = \min(n,m)$; the column vectors $\vec{v}_1,\ldots,\vec{v}_r$ of $V$ each maximize $\Var(\proj_{v_i}F_{i-1})$, where $F_{i-1}$ is the \emph{normal space} or \emph{orthogonal complement} to the span $\langle \vec{v}_1, \ldots, \vec{v}_{i-1} \rangle$ (starting with $F_0 = F$); and each $\Var(\proj_{v_i}F_{i-1}) = {\sigma_i}^2$.
 SVD thus obtains an ordered set of \emph{artificial coordinates} for the proxy point cloud $F$.
 
 Two of the most widely used GDA techniques are principal components analysis (PCA), which obtains $X$ by centering and scaling numeric case--variable data, and correspondence analysis (CA), which obtains a matrix of standardized residuals from bivariate count data.
@@ -225,9 +225,9 @@ Lock5withR::Cereal |>
     Lines 19--23: Variable markers in standard coordinates are projected from
     unit vectors onto the 2-D window; shorter lengths indicate worse approximations.
     Lines 24--28: Referential stat for orthogonal projections from a case marker to
-    an axis approximately recover values in the table; relies on \code{LayerRef}
+    an axis that approximately recover values in the table; relies on \code{LayerRef}
     and assumes predictive scales.
-    Line 29: Subclass of \code{CoordFixed} that fixes aspect ratios for both
+    Line 29: Subclass of \code{CoordFixed} fixes aspect ratios for both
     coordinate axes, essential for interpreting the above,
     and window dimensions, which visually signals the geometry.
     Line 30: Subtheme removes scaffolding elements.
