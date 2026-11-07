@@ -24,6 +24,11 @@ min_dist <- 0.8
 proj_subset <- 23                     # single row to project
 ref_subset   <- c(2, 4, 6)            # reference rows for projection lines
 
+interp_data <- Cereal[
+  proj_subset,
+  c("Calories", "Fat", "Sodium", "Carbs", "Fiber", "Sugars", "Protein")
+]
+
 # ---- Base ordination -----------------------------------------------------
 cereal_ord_raw <- Cereal |>
   ordinate(cols = Calories:Protein, model = ~prcomp(., scale. = TRUE))
@@ -64,22 +69,40 @@ make_gugog_plot <- function(balance, axis_type = "predictive") {
       arrow = grid::arrow(length = unit(.01, "native"), type = "closed"),
       linewidth = .75, color = pal[["vermillion"]], vector_labels = FALSE
     ) +
-    stat_rows_projection(
-      subset = proj_subset, ref_subset = ref_subset,
-      color = pal[["bluishgreen"]], linetype = "dashed", linewidth = .75
-    ) +
     coord_fixed(xlim = c(-M, M), ylim = c(-M, M))
 
   if (axis_type == "predictive") {
-    p <- p + theme_biplot()
+    p <- p +
+      stat_rows_projection(
+        subset = proj_subset, ref_subset = ref_subset,
+        color = pal[["bluishgreen"]], linetype = "dashed", linewidth = .75
+      ) +
+      theme_biplot()
+  } else if (axis_type == "interpolative" && balance == 1) {
+    p <- p +
+      geom_cols_interpolation(
+        aes(center = center, scale = scale, interpolate = name),
+        new_data = interp_data,
+        type = "centroid",
+        color = pal[["orange"]],
+        linetype = "dashed",
+        linewidth = .75
+      )
   }
   p
 }
 
 # ---- Balance sequence for smooth looping ---------------------------------
-forward  <- seq(0, 1, by = 0.02)   # full‑row → full‑column (51 frames)
+forward  <- seq(0, 1, length.out = 61)   # full‑row → full‑column (61 frames)
 len <- length(forward)
-balances <- c(forward[-len], rev(forward)[-len])  # total 100 frames
+# total 120 frames
+balances_pred <- c(forward[-len], rev(forward)[-len])
+# total 144 frames
+balances_interp <- c(
+  forward[-len],
+  rep(1, 24),
+  rev(forward)[-len]
+)
 
 # ---- Output dimensions (same as static figure) --------------------------
 # inches * scale factor (copied from gugog-figure.r)
@@ -87,7 +110,7 @@ sf <- 1
 text_width <- 7 * sf
 
 # ---- Function to render frames and build GIF -----------------------------
-render_gif <- function(axis_type) {
+render_gif <- function(axis_type, balances) {
   out_dir <- file.path("supporting-materials", "gif_frames", axis_type)
   dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 
@@ -115,5 +138,5 @@ render_gif <- function(axis_type) {
 }
 
 # ---- Generate both GIFs ---------------------------------------------------
-render_gif("predictive")
-render_gif("interpolative")
+render_gif("predictive", balances_pred)
+render_gif("interpolative", balances_interp)

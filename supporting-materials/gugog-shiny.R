@@ -98,8 +98,13 @@ server <- function(input, output, session) {
 
   # Reactive balanced ordination (uses confer_inertia)
   balanced_tbl <- reactive({
-    p <- input$balance
-    confer_inertia(tbl_ord_raw, c(p, 1 - p))
+    if (axis_type() == "interpolative") {
+      # Standard coordinates required for interpolation
+      confer_inertia(tbl_ord_raw, p = "rows")
+    } else {
+      p <- input$balance
+      confer_inertia(tbl_ord_raw, c(p, 1 - p))
+    }
   })
 
   # Axis type string based on toggle
@@ -132,12 +137,25 @@ server <- function(input, output, session) {
         linewidth = .75, color = pal[["vermillion"]],
         vector_labels = FALSE
       ) +
-      stat_rows_projection(
-        subset = as.integer(input$proj_rows),
-        ref_subset = as.integer(input$ref_rows),
-        color = pal[["bluishgreen"]],
-        linetype = "dashed", linewidth = .75
-      ) +
+        if (axis_type() == "predictive") {
+          stat_rows_projection(
+            subset = as.integer(input$proj_rows),
+            ref_subset = as.integer(input$ref_rows),
+            color = pal[["bluishgreen"]],
+            linetype = "dashed", linewidth = .75
+          )
+        } else {
+          # Interpolation layer for interpolative axis calibration
+          interp_data <- Cereal[as.integer(input$proj_rows), c("Calories", "Fat", "Sodium", "Carbs", "Fiber", "Sugars", "Protein")]
+geom_cols_interpolation(
+              aes(center = center, scale = scale, interpolate = name),
+              new_data = interp_data,
+              type = "centroid",
+              color = pal[["bluishgreen"]],
+              linetype = "dashed",
+              linewidth = .75
+            )
+        } +
       coord_fixed(xlim = c(-M, M), ylim = c(-M, M))
 
     if (use_theme()) {
