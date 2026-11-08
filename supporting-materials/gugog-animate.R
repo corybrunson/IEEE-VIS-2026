@@ -84,7 +84,7 @@ make_gugog_plot <- function(balance, axis_type = "predictive") {
         aes(center = center, scale = scale, interpolate = name),
         new_data = interp_data,
         type = "centroid",
-        color = pal[["orange"]],
+        color = pal[["reddishpurple"]],
         linetype = "dashed",
         linewidth = .75
       )
