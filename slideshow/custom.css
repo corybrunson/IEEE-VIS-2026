@@ -1,0 +1,28 @@
+.title {
+  font-size: 4rem !important;
+}
+
+.quarto-title-author-name {
+  font-size: 2rem;
+}
+
+.date {
+  font-size: 2rem;
+}
+
+.reveal h1 {
+  font-size: 4rem !important;
+}
+
+/* paragraphs & list items */
+.reveal p,
+.reveal li {
+  font-size: 2rem;   /* 1.2rem => 120% of default */
+  line-height: 1.2;
+}
+
+.reveal .small-body p,
+.reveal .small-body li {
+  font-size: 1.6rem !important;
+  line-height: 1.2 !important;
+}
