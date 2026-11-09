@@ -144,116 +144,149 @@ Jason Cory Brunson
 
   <p class="date">2026-11-09</p>
 </section>
-<section class="slide level2">
-
-<div class="columns">
-<div class="column" style="width:50%;">
+<section id="intro" class="title-slide slide level1 center">
+<h1>intro</h1>
+<p>Emergent themes:</p>
 <ul>
-<li>thank you for welcoming me</li>
-<li>biplots as a case study</li>
+<li>validity &amp; constraints v. flexibility &amp; control</li>
+<li>domain-specificity of this trade-off</li>
 </ul>
-</div><div class="column" style="width:50%;">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="figures/qrcode.png" style="width:50.0%"></p>
-<figcaption>QR code for the repository</figcaption>
-</figure>
-</div>
-</div></div>
+<p>Think of biplots as a case study.</p>
+<!--
+![paper & slideshow repo](figures/qrcode.png){width=100%}
+-->
 </section>
-<section class="slide level2">
 
-</section>
-<section>
 <section id="geometric-data-analysis" class="title-slide slide level1 center">
 <h1>geometric data analysis</h1>
 
 </section>
-<section class="slide level2">
 
-</section></section>
-<section>
-<section id="foundation" class="title-slide slide level1 small-body center">
-<h1>foundation</h1>
+<section id="ordination-gradient-analysis" class="title-slide slide level1 small-body center">
+<h1>ordination (gradient analysis)</h1>
 <ol type="1">
-<li><p>Data matrix <span class="math inline">\(X_{n \times p} \in \mathbb{R}^{n \times p}\)</span></p></li>
+<li><p>Data matrix <span class="math inline">\(X_{n \times p} \in \mathbb{R}^{n \times p}\)</span>:</p>
+<ul>
+<li>centered &amp; scaled case–variable table (principal components analysis)</li>
+<li>double-centered contingency table (correspondence analysis)</li>
+</ul></li>
 <li><p>SVD into <strong>inertia</strong> and rotation matrices of left and right <strong>singular vectors</strong>: <span class="math display">\[X = U_{n \times k}\ D_{k \times k}\ {V_{p \times k}}^\top\]</span></p></li>
-<li><p>Low-dimensional approximation via first <span class="math inline">\(r\)</span> <strong>ordinates</strong>: <span class="math display">\[X \approx U_r\ D_r\ {V_r}^\top\]</span></p></li>
+<li><p>Low-dimensional approximation via first <span class="math inline">\(r &lt; k\)</span> <strong>ordinates</strong>:</p></li>
 </ol>
 
-<img data-src="figures/SVD.jpg" style="width:80.0%" class="r-stretch quarto-figure-center" id="fig-svd"><p class="caption">
-Figure&nbsp;1: singular value decomposition
-</p></section>
-<section class="slide level2">
+<img data-src="figures/SVD.jpg" style="width:100.0%" class="r-stretch"></section>
 
-</section></section>
-<section>
 <section id="biplots" class="title-slide slide level1 small-body center">
 <h1>biplots</h1>
-<p><strong>Principal coordinates</strong> <span class="math inline">\(F = UD\)</span> or <span class="math inline">\(G = VD\)</span> approximate the geometry of the rows or columns of <span class="math inline">\(X\)</span>:</p>
+<p><strong>Principal coordinates</strong> <span class="math inline">\(F = UD\)</span> and <span class="math inline">\(G = VD\)</span> approximate the geometry of the rows or columns of <span class="math inline">\(X\)</span>:</p>
 <ul>
-<li>Distances <span class="math inline">\(\lVert f_{j\ \bullet} - f_{i\ \bullet} \rVert\)</span> approximate distances <span class="math inline">\(\sqrt{(x_{j\ 1} - x_{i\ 1})^2 + \cdots + (x_{j\ p} - x_{i\ p})^2}\)</span></li>
-<li>Inner products <span class="math inline">\(\frac{1}{n}\ g_{i\ \bullet}\cdot g_{j\ \bullet}\)</span> approximate covariances <span class="math inline">\(\operatorname{cov}(x_{\bullet\ i},x_{\bullet\ j})\)</span>
+<li>Distances between rows of <span class="math inline">\(F\)</span> approximate distances between cases of <span class="math inline">\(X\)</span>
 <ul>
-<li>Cosines <span class="math inline">\(\cos(\arg(g_{i\ \bullet},g_{j\ \bullet}))\)</span> approximate correlations <span class="math inline">\(\operatorname{cor}(x_{\bullet\ i},x_{\bullet\ j})\)</span></li>
+<li>Lengths approximate distances from the origin</li>
+</ul></li>
+<li>Inner products of rows of <span class="math inline">\(G\)</span> approximate covariances of variables of <span class="math inline">\(X\)</span>
+<ul>
+<li>Cosines approximate correlations</li>
 </ul></li>
 </ul>
 <p><strong>Standard coordinates</strong> <span class="math inline">\(U\)</span> or <span class="math inline">\(V\)</span> pair with principal coordinates to recover the values of <span class="math inline">\(X\)</span>:</p>
 <ul>
-<li>Inner products <span class="math inline">\(f_{i\ \bullet}\cdot v_{j\ \bullet}\)</span> and <span class="math inline">\(u_{i\ \bullet}\cdot g_{j\ \bullet}\)</span> approximate entries <span class="math inline">\(x_{ij}\)</span></li>
+<li>Inner products of rows of <span class="math inline">\(F\)</span> and <span class="math inline">\(V\)</span>, or of <span class="math inline">\(U\)</span> and <span class="math inline">\(G\)</span>, approximate entries of <span class="math inline">\(X\)</span></li>
 </ul>
-<p><strong>Biplots</strong> superimpose row and column coordinates with shares <span class="math inline">\((a,b)\)</span> of inertia: <span class="math display">\[\left[\begin{array}{c} U\ D^a \\ V\ D^b \end{array}\right] \in \mathbb{R}^{(n + p) \times r}\]</span></p>
+<p><strong>Biplots</strong> superimpose row coordinates <span class="math inline">\(UD^a\)</span> and column coordinates <span class="math inline">\(VD^b\)</span> with <span class="math inline">\(a + b = 1\)</span></p>
 </section>
-<section class="slide level2">
 
-</section></section>
-<section>
-<section id="summary" class="title-slide slide level1 center">
-<h1>summary</h1>
+<section id="recap" class="title-slide slide level1 center">
+<h1>recap</h1>
 <ul>
-<li>shared highly rigid statistical theory underlying many techniques</li>
-<li>geometric representation exists prior to graphical specification</li>
-<li>limited selection of software tools; most shield users from unifying theory</li>
+<li>shared, highly rigid statistical theory underlying many techniques</li>
+<li>rigid geometric representation essential for interpretation</li>
+<li>few devoted software tools; most obscure unifying theory</li>
 </ul>
 </section>
-<section class="slide level2">
 
-</section></section>
-<section>
-<section id="implications-for-gog" class="title-slide slide level1 center">
-<h1>implications for GoG</h1>
+<section id="challenges-for-graphical-grammars" class="title-slide slide level1 center">
+<h1>challenges for graphical grammars</h1>
 
 </section>
-<section class="slide level2">
 
-</section></section>
-<section>
-<section id="non-proportional-dependency-between-plot-elements" class="title-slide slide level1 center">
-<h1>non-proportional dependency between plot elements</h1>
+<section id="aspect-ratios-axes-and-panels" class="title-slide slide level1 center">
+<h1>aspect ratios (axes and panels)</h1>
 <div class="columns">
 <div class="column" style="width:50%;">
-<p>proper biplots have balanced inertia: superimpose <span class="math inline">\(U D^{a}\)</span> and <span class="math inline">\(V D^{b}\)</span> with <span class="math inline">\(a + b = 1\)</span></p>
+<p><img data-src="figures/iris-pca-free.jpg" style="width:100.0%"> <img data-src="figures/iris-pca-fixed.jpg" style="width:100.0%"></p>
 </div><div class="column" style="width:50%;">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="figures/cereal-pca-interpolative.gif" style="width:100.0%"></p>
-<figcaption>balanced inertia oscillating between <span class="math inline">\((1,0)\)</span> and <span class="math inline">\((0,1)\)</span></figcaption>
-</figure>
-</div>
+<p><img data-src="figures/iris-pca-square.jpg" style="width:100.0%"></p>
 </div></div>
 </section>
-<section class="slide level2">
 
-</section></section>
-<section>
-<section id="contributions-to-gog" class="title-slide slide level1 center">
-<h1>contributions to GoG</h1>
+<section id="also-relevant-to-glyphs" class="title-slide slide level1 center">
+<h1>(also relevant to glyphs)</h1>
+
+<img data-src="figures/anderson1936-fig8.jpg" style="width:100.0%" class="r-stretch"></section>
+
+<section id="axis-calibration" class="title-slide slide level1 center">
+<h1>axis calibration</h1>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><img data-src="figures/iris-pca-interp.jpg" style="width:100.0%"></p>
+</div><div class="column" style="width:50%;">
+<p><img data-src="figures/iris-pca-pred.jpg" style="width:100.0%"></p>
+</div></div>
+</section>
+
+<section id="conference-of-inertia" class="title-slide slide level1 center">
+<h1>conference of inertia</h1>
+
+<img data-src="figures/cereal-pca-vector.gif" style="width:100.0%" class="r-stretch"></section>
+
+<section id="referential-positioning" class="title-slide slide level1 center">
+<h1>referential positioning</h1>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><img data-src="figures/iris-pca-pred.jpg" style="width:100.0%"></p>
+</div><div class="column" style="width:50%;">
+<p><img data-src="figures/iris-pca-rule.jpg" style="width:100.0%"></p>
+</div></div>
+</section>
+
+<section id="high-dimensional-geometry" class="title-slide slide level1 center">
+<h1>high-dimensional geometry</h1>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><img data-src="figures/euro-cmds-low.jpg" style="width:100.0%"></p>
+</div><div class="column" style="width:50%;">
+<p><img data-src="figures/euro-cmds-high.jpg" style="width:100.0%"></p>
+</div></div>
+</section>
+
+<section id="precap" class="title-slide slide level1 small-body center">
+<h1>precap</h1>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>Ordination techniques yield high-dimensional geometric representations</p>
+<ul>
+<li>intermediate phase (bundle?) of <em>geometric representations</em> between statistical transformations and graphical elements</li>
+</ul>
+<p>Biplot specifications complicate the distinctions between steps in the GoG pipeline</p>
+<ul>
+<li>blurred boundaries between geometric elements, coordinate systems, and guides</li>
+<li>“breaking the fourth wall”</li>
+</ul>
+<p>Cross-domain modularity requires us to systematize domain–dialect relations</p>
+<ul>
+<li>logical property–constraint table; formal concept analysis?</li>
+<li>heightened risk that example galleries reduce grammars to typologies</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p><img data-src="figures/iris-pca-path.gif" style="width:100.0%"></p>
+</div></div>
+</section>
+
+<section id="thank-you" class="title-slide slide level1 center">
+<h1>thank you!</h1>
 
 </section>
-<section class="slide level2">
-
-
-</section></section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <div class="footer footer-default">
@@ -339,7 +372,7 @@ Figure&nbsp;1: singular value decomposition
         disableLayout: false,
 
         // Vertical centering of slides
-        center: false,
+        center: true,
 
         // Enables touch navigation on devices with touch input
         touch: true,

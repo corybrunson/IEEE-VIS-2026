@@ -5,8 +5,10 @@ library(ordr)
 library(expm)
 
 sepal_plot <- ggplot(iris) +
-  geom_point(aes(Sepal.Length, Sepal.Width, color = Species)) +
-  coord_fixed()
+  geom_point(aes(Sepal.Length, Sepal.Width, color = Species, shape = Species)) +
+  scale_color_brewer(palette = "Dark2") +
+  coord_fixed() +
+  guides(color = "none", shape = "none")
 sepal_plot
 
 cols_inner_prod <- function(cols, rot = diag(rep(1, 4))) {
@@ -24,14 +26,16 @@ pca_cols <- fortify(iris_pca) |> filter(.matrix == "cols")
 pca_cols <- mutate(pca_cols, inner = cols_inner_prod(pca_cols))
 
 biplot <- ggplot() +
-  geom_point(data = pca_rows, aes(PC1, PC2, color = Species)) +
+  geom_point(data = pca_rows, aes(PC1, PC2, color = Species, shape = Species)) +
   geom_axis(
     data = pca_cols,
     mapping = aes(PC1, PC2, label = name, center = center, alpha = inner),
     axis.type = "predictive"
   ) +
+  scale_color_brewer(palette = "Dark2") +
   scale_alpha_continuous(range = c(0, 1)) +
-  coord_square() + theme_biplot()
+  coord_square() + theme_biplot() +
+  guides(color = "none", shape = "none", alpha = "none")
 biplot
 
 rot_rows <- select(pca_rows, starts_with("PC")) |> 
@@ -48,7 +52,10 @@ rot_cols <- select(pca_cols, starts_with("PC")) |>
 rot_cols <- mutate(rot_cols, inner = cols_inner_prod(rot_cols))
 
 rot_biplot <- ggplot() +
-  geom_point(data = rot_rows, aes(Sepal.Length, Sepal.Width, color = Species)) +
+  geom_point(
+    data = rot_rows,
+    aes(Sepal.Length, Sepal.Width, color = Species, shape = Species)
+  ) +
   geom_axis(
     data = rot_cols,
     mapping = aes(
@@ -57,8 +64,10 @@ rot_biplot <- ggplot() +
     ),
     axis.type = "predictive"
   ) +
+  scale_color_brewer(palette = "Dark2") +
   scale_alpha_continuous(range = c(0, 1)) +
-  coord_square() + theme_biplot()
+  coord_square() + theme_biplot() +
+  guides(color = "none", shape = "none", alpha = "none")
 rot_biplot
 
 path_rot <- function(t) {
@@ -82,15 +91,17 @@ make_path_biplot <- function(t) {
   ggplot() +
     geom_point(
       data = path_rows,
-      mapping = aes(R1, R2, color = Species)
+      mapping = aes(R1, R2, color = Species, shape = Species)
     ) +
     geom_axis(
       data = path_cols,
       mapping = aes(R1, R2, label = name, center = center, alpha = inner),
       axis.type = "predictive"
     ) +
+    scale_color_brewer(palette = "Dark2") +
     scale_alpha_continuous(range = c(0, 1)) +
-    coord_square() + theme_biplot()
+    coord_square() + theme_biplot() +
+    guides(color = "none", shape = "none", alpha = "none")
 }
 path_biplots <- lapply(seq(0, 1, by = 0.2), make_path_biplot)
 lapply(path_biplots, plot)
@@ -104,10 +115,10 @@ for (i in seq_along(ts)) {
   frame_files[i] <- file.path(frame_dir, sprintf("frame_%03d.png", i))
   ggsave(
     frame_files[i], make_path_biplot(ts[i]),
-    width = 6, height = 6, dpi = 150
+    width = 5, height = 5, dpi = 150
   )
 }
-gif_file <- file.path(getwd(), "iris-pca-path.gif")
+gif_file <- here::here("slideshow/figures", "iris-pca-path.gif")
 anim <- magick::image_read(frame_files) |>
   magick::image_animate(fps = 10)
 magick::image_write(anim, gif_file, format = "gif")

@@ -6,6 +6,7 @@ format:
   revealjs:
     slide-number: true
     theme: simple
+    center: true
     css: custom.css
 ---
 
@@ -22,80 +23,133 @@ if (! file.exists("figures/qrcode.png")) {
 }
 ```
 
----
+# intro
 
-::: {.columns}
-::: {.column width="50%"}
-* thank you for welcoming me
-* biplots as a case study
-:::
-::: {.column width="50%"}
-![QR code for the repository](figures/qrcode.png){width=50%}
-:::
-:::
+Emergent themes:
 
----
+* validity & constraints v. flexibility & control
+* domain-specificity of this trade-off
+
+Think of biplots as a case study.
+
+<!--
+![paper & slideshow repo](figures/qrcode.png){width=100%}
+-->
 
 # geometric data analysis
 
----
+# ordination (gradient analysis) {.small-body}
 
-# foundation {.small-body}
+1. Data matrix $X_{n \times p} \in \mathbb{R}^{n \times p}$:
 
-1. Data matrix $X_{n \times p} \in \mathbb{R}^{n \times p}$
+    - centered & scaled case--variable table (principal components analysis)
+    - double-centered contingency table (correspondence analysis)
 
 2. SVD into **inertia** and rotation matrices of left and right **singular vectors**:
 $$X = U_{n \times k}\ D_{k \times k}\ {V_{p \times k}}^\top$$
 
-3. Low-dimensional approximation via first $r$ **ordinates**:
-$$X \approx U_r\ D_r\ {V_r}^\top$$
+3. Low-dimensional approximation via first $r < k$ **ordinates**:
 
-![singular value decomposition](figures/SVD.jpg){#fig-svd width=80%}
-
----
+![](figures/SVD.jpg){width=100%}
 
 # biplots {.small-body}
 
-**Principal coordinates** $F = UD$ or $G = VD$ approximate the geometry of the rows or columns of $X$:
+**Principal coordinates** $F = UD$ and $G = VD$ approximate the geometry of the rows or columns of $X$:
 
-* Distances $\lVert f_{j\ \bullet} - f_{i\ \bullet} \rVert$ approximate distances $\sqrt{(x_{j\ 1} - x_{i\ 1})^2 + \cdots + (x_{j\ p} - x_{i\ p})^2}$
-* Inner products $\frac{1}{n}\ g_{i\ \bullet}\cdot g_{j\ \bullet}$ approximate covariances $\operatorname{cov}(x_{\bullet\ i},x_{\bullet\ j})$
-  * Cosines $\cos(\arg(g_{i\ \bullet},g_{j\ \bullet}))$ approximate correlations $\operatorname{cor}(x_{\bullet\ i},x_{\bullet\ j})$
+* Distances between rows of $F$ approximate distances between cases of $X$
+  * Lengths approximate distances from the origin
+* Inner products of rows of $G$ approximate covariances of variables of $X$
+  * Cosines approximate correlations
 
 **Standard coordinates** $U$ or $V$ pair with principal coordinates to recover the values of $X$:
 
-* Inner products $f_{i\ \bullet}\cdot v_{j\ \bullet}$ and $u_{i\ \bullet}\cdot g_{j\ \bullet}$ approximate entries $x_{ij}$
+* Inner products of rows of $F$ and $V$, or of $U$ and $G$, approximate entries of $X$
 
-**Biplots** superimpose row and column coordinates with shares $(a,b)$ of inertia:
-$$\left[\begin{array}{c} U\ D^a \\ V\ D^b \end{array}\right] \in \mathbb{R}^{(n + p) \times r}$$
+**Biplots** superimpose row coordinates $UD^a$ and column coordinates $VD^b$ with $a + b = 1$
 
----
+# recap
 
-# summary
+- shared, highly rigid statistical theory underlying many techniques
+- rigid geometric representation essential for interpretation
+- few devoted software tools; most obscure unifying theory
 
-- shared highly rigid statistical theory underlying many techniques
-- geometric representation exists prior to graphical specification
-- limited selection of software tools; most shield users from unifying theory
+# challenges for graphical grammars
 
----
-
-# implications for GoG
-
----
-
-# non-proportional dependency between plot elements
+# aspect ratios (axes and panels)
 
 ::: {.columns}
 ::: {.column width="50%"}
-proper biplots have balanced inertia: superimpose $U D^{a}$ and $V D^{b}$ with $a + b = 1$
+![](figures/iris-pca-free.jpg){width=100%}
+![](figures/iris-pca-fixed.jpg){width=100%}
 :::
 ::: {.column width="50%"}
-![balanced inertia oscillating between $(1,0)$ and $(0,1)$](figures/cereal-pca-interpolative.gif){width=100%}
+![](figures/iris-pca-square.jpg){width=100%}
 :::
 :::
 
----
+# (also relevant to glyphs)
 
-# contributions to GoG
+![](figures/anderson1936-fig8.jpg){width=100%}
 
----
+# axis calibration
+
+::: {.columns}
+::: {.column width="50%"}
+![](figures/iris-pca-interp.jpg){width=100%}
+:::
+::: {.column width="50%"}
+![](figures/iris-pca-pred.jpg){width=100%}
+:::
+:::
+
+# conference of inertia
+
+![](figures/cereal-pca-vector.gif){width=100%}
+
+# referential positioning
+
+::: {.columns}
+::: {.column width="50%"}
+![](figures/iris-pca-pred.jpg){width=100%}
+:::
+::: {.column width="50%"}
+![](figures/iris-pca-rule.jpg){width=100%}
+:::
+:::
+
+# high-dimensional geometry
+
+::: {.columns}
+::: {.column width="50%"}
+![](figures/euro-cmds-low.jpg){width=100%}
+:::
+::: {.column width="50%"}
+![](figures/euro-cmds-high.jpg){width=100%}
+:::
+:::
+
+# precap {.small-body}
+
+::: {.columns}
+::: {.column width="50%"}
+Ordination techniques yield high-dimensional geometric representations
+
+* intermediate phase (bundle?) of _geometric representations_ between statistical transformations and graphical elements
+
+Biplot specifications complicate the distinctions between steps in the GoG pipeline
+
+* blurred boundaries between geometric elements, coordinate systems, and guides
+* "breaking the fourth wall"
+
+Cross-domain modularity requires us to systematize domain--dialect relations
+
+* logical property--constraint table; formal concept analysis?
+* heightened risk that example galleries reduce grammars to typologies
+
+:::
+::: {.column width="50%"}
+![](figures/iris-pca-path.gif){width=100%}
+:::
+:::
+
+# thank you!

@@ -46,7 +46,7 @@ tbl_bal1 <- confer_inertia(cereal_ord_raw, c(1, 0))   # all inertia on PC1
 M <- max(pc_range(tbl_bal0), pc_range(tbl_bal1)) * 1.05   # 5% margin
 
 # ---- Helper to build a single plot --------------------------------------
-make_gugog_plot <- function(balance, axis_type = "predictive") {
+make_gugog_plot <- function(balance, axis_type) {
   bal_tbl <- confer_inertia(cereal_ord_raw, c(balance, 1 - balance))
   tt_fort <- fortify(bal_tbl)
 
@@ -58,35 +58,57 @@ make_gugog_plot <- function(balance, axis_type = "predictive") {
       data = label_df, aes(label = Name),
       size = 3, color = pal[["blue"]]
     ) +
-    geom_cols_axis(
-      aes(label = name, center = center, scale = scale),
-      axis.type = axis_type,
-      size = 4, tick_length = .01, text_dodge = .012,
-      label_dodge = .02, num = 10
-    ) +
-    geom_unit_circle(color = pal[["vermillion"]]) +
-    geom_cols_vector(
-      arrow = grid::arrow(length = unit(.01, "native"), type = "closed"),
-      linewidth = .75, color = pal[["vermillion"]], vector_labels = FALSE
-    ) +
-    coord_fixed(xlim = c(-M, M), ylim = c(-M, M))
+    coord_square(xlim = c(-M, M), ylim = c(-M, M)) +
+    annotate(
+      "text", x = 0, y = M, size = 6,
+      label = paste(
+        "inertia: (",
+        format(round(balance, digits = 2), nsmall = 2),
+        ",",
+        format(round(1 - balance, digits = 2), nsmall = 2),
+        ")"
+      )
+    )
 
   if (axis_type == "predictive") {
     p <- p +
+      geom_cols_axis(
+        aes(label = name, center = center, scale = scale),
+        axis.type = axis_type,
+        size = 4, tick_length = .01, text_dodge = .012,
+        label_dodge = .02, num = 10
+      ) +
       stat_rows_projection(
         subset = proj_subset, ref_subset = ref_subset,
         color = pal[["bluishgreen"]], linetype = "dashed", linewidth = .75
       ) +
       theme_biplot()
-  } else if (axis_type == "interpolative" && balance == 1) {
+  } else if (axis_type == "interpolative") {
     p <- p +
-      geom_cols_interpolation(
-        aes(center = center, scale = scale, interpolate = name),
-        new_data = interp_data,
-        type = "centroid",
-        color = pal[["reddishpurple"]],
-        linetype = "dashed",
-        linewidth = .75
+      geom_cols_axis(
+        aes(label = name, center = center, scale = scale),
+        axis.type = axis_type,
+        size = 4, tick_length = .01, text_dodge = .012,
+        label_dodge = .02, num = 10
+      )
+    if (balance == 1) {
+      p <- p +
+        geom_cols_interpolation(
+          aes(center = center, scale = scale, interpolate = name),
+          new_data = interp_data,
+          type = "centroid",
+          color = pal[["reddishpurple"]],
+          linetype = "dashed",
+          linewidth = .75
+        )
+    }
+  } else if (axis_type == "vector") {
+    p <- p +
+      geom_unit_circle(color = pal[["vermillion"]]) +
+      geom_cols_vector(
+        aes(label = name),
+        arrow = grid::arrow(length = unit(.01, "native"), type = "closed"),
+        linewidth = .75, color = pal[["vermillion"]], size = 4
       )
   }
   p
@@ -101,13 +123,14 @@ balances_pred <- c(forward[-len], rev(forward)[-len])
 balances_interp <- c(
   forward[-len],
   rep(1, 24),
-  rev(forward)[-len]
+  rev(forward)[-len],
+  rep(0, 24)
 )
 
 # ---- Output dimensions (same as static figure) --------------------------
 # inches * scale factor (copied from gugog-figure.r)
 sf <- 1
-text_width <- 7 * sf
+text_width <- 6 * sf
 
 # ---- Function to render frames and build GIF -----------------------------
 render_gif <- function(axis_type, balances) {
@@ -126,9 +149,9 @@ render_gif <- function(axis_type, balances) {
   frames <- list.files(out_dir, pattern = "\\.png$", full.names = TRUE)
   imgs <- image_read(frames)
   gif <- image_animate(imgs, fps = 10)  # adjust speed if needed
-  gif_path <- file.path(
-    "supporting-materials",
-    paste0("gugog-figure-", axis_type, ".gif")
+  gif_path <- here::here(
+    "slideshow/figures/",
+    paste0("cereal-pca-", axis_type, ".gif")
   )
   image_write(gif, path = gif_path)
 
@@ -140,3 +163,4 @@ render_gif <- function(axis_type, balances) {
 # ---- Generate both GIFs ---------------------------------------------------
 render_gif("predictive", balances_pred)
 render_gif("interpolative", balances_interp)
+render_gif("vector", balances_interp)

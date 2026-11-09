@@ -24,5 +24,23 @@
 .reveal .small-body p,
 .reveal .small-body li {
   font-size: 1.6rem !important;
-  line-height: 1.2 !important;
+  line-height: 1 !important;
+}
+
+.reveal figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+.reveal figcaption {
+  text-align: center;
+}
+.reveal img,
+.reveal p > img,
+.reveal div > img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
